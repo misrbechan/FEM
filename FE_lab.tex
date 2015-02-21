@@ -15,6 +15,10 @@
 \begin{center}
 	\textbf{Computer Assignment 4.1.1}\\
 	\textbf{MMP Finite Element Methods (WI4243AP-FE)}
+	\begin{tabular}{lr}
+		\textbf{Shaikh Bechan} & \textbf{4146425}\\
+		\textbf{Zubin Ramlakhan} & \\
+	\end{tabular}
 \end{center}
 
 \section{Introduction}
@@ -60,4 +64,21 @@ k\frac{\partial T}{\partial n}|_{\Gamma_4}=-\alpha(T_w - T_{\infty})
 
 In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero while $\Gamma_4$ obeys Newton's heat transfer relation with $T_{\infty}$ the environment temperature and $T_w$ the temperature at the wall.
 
+In this problem a symmetry plane is present. This plane runs along the midsection of the plate in the vertical direction. Here, to ensure symmetry, the gradient of the temperature must be zero.
+
+\newpage
+
+\section{Minimization problem}
+A partial differential equation can be related to an equivalent minimization problem with the following theorem:\\
+
+\textit{Let $L$ be a linear, symmetric, positive differential operator defined of space $\Sigma$ and let}
+\begin{equation}\label{eq:pde}
+Lu=f
+\end{equation}
+\textit{Then the solution $u$ minimizes the functional}
+\begin{equation}\label{eq:min}
+I(u) = \int _{\Omega}\{\frac{1}{2}uLu-uf\}d\Omega
+\end{equation}  \textit{over the space $\Sigma$. On the other hand, if $u$ minimizes \eqref{eq:min} then $u$ satisfies \eqref{eq:pde}} \\
+
+Another requirement $u$ should obey is homogeneous boundary conditions, a requirement $T$ fails. Even so, this theorem can still be utilized by adapting it or by making the boundary conditions homogeneous. The latter is simpler to accomplish.
 \end{document}
