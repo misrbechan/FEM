@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+%\usepackage{biblatex}
 \title{Finite Element Method Computer Assignment 4.1.1}
 \begin{document}
 
@@ -23,26 +24,24 @@
 
 \section{Introduction}
 The following is a report containing the evaluation of the heat equation with the finite element method.
-First the problem is defined followed by the derivation of the element matrix and vector.
+To solve the two-dimensional heat equation numerically, the finite element method is applied. To that end the minimization problem corresponding to the partial differential in question is derived. The solution of the minimization problem is approximated with the finite element method by deriving the element stiffness matrix and element stiffness vector using triangular and line elements.
 
-\section{Problem formulation}
-Consider a rectangular plate, with width, $b$, and height, $h$. In the center of the plate is a rectangular part, of a different material, with width, $b_0$ and height, $h_0$. $A$ denotes the outer part of the plate while $B$ denotes the inner part.
-
-	\begin{figure}[t]
+\section{The Heat Equation}
+	\begin{figure}[h]
 		\centering
-		\includegraphics{schem.png}
-		\caption{caption}
+		\includegraphics[width=0.6\textwidth]{schem.png}
+		\caption{Rectangular plate made of two materials, $A$ and $B$.}
 		\label{fig:schem}
-	
 	\end{figure}
+Consider the rectangular plate shown in figure \ref{fig:schem}, with width, $b$, and height, $h$. In the center of the plate is a rectangular part, of a different material, with width, $b_0$ and height, $h_0$. $A$ denotes the outer part of the plate while $B$ denotes the inner part.
 
-Figure ~\ref{fig:schem} shows a schematic of the rectangular plate. The stationary heat equation is given by the two-dimensional equation 
+The situation is stationary and the effects of convection and sources are absent. Thus the heat equation is simply defined by the conduction (diffusion) term as shown in \eqref{eq:heat}
 
-\begin{equation}
+\begin{equation}\label{eq:heat}
 	-\nabla \cdot (k \nabla T) = 0
 \end{equation}
 
-with heat conductivity $k$ and temperature $T$. The thermal conductivity is different in each material, i.e. $ k|_A = k_A $ and $k|_B = k_B $.
+with heat conductivity $k$ and temperature $T$. The thermal conductivity is different in each material, i.e. $ k|_A = k_A $ and $k|_B = k_B $.\\
 
 The boundary of $A$, $\partial A$,  is divided in four segments such that $\partial A = \Gamma_1 \cup  \Gamma_2 \cup  \Gamma_3 \cup  \Gamma_4$. On these boundaries the following conditions hold:
 
@@ -51,7 +50,7 @@ T|_{\Gamma_1} = T_0
 \end{equation}
 
 \begin{equation}
-\nabla T|_{\Gamma_2} = T_0
+\nabla T|_{\Gamma_2} = 0
 \end{equation}
 
 \begin{equation}
@@ -62,14 +61,12 @@ T|_{\Gamma_3} = T_0
 k\frac{\partial T}{\partial n}|_{\Gamma_4}=-\alpha(T_w - T_{\infty})
 \end{equation}
 
-In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero while $\Gamma_4$ obeys Newton's heat transfer relation with $T_{\infty}$ the environment temperature and $T_w$ the temperature at the wall.
+In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero. $\Gamma_4$ obeys Newton's heat transfer relation with the environment temperature $T_{\infty}$ and the temperature at the wall $T_w$.\\
 
 In this problem a symmetry plane is present. This plane runs along the midsection of the plate in the vertical direction. Here, to ensure symmetry, the gradient of the temperature must be zero.
 
-\newpage
-
 \section{Minimization problem}
-A partial differential equation can be related to an equivalent minimization problem with the following theorem:\\
+A partial differential equation can be related to an equivalent minimization problem with the following theorem\cite{Kan2008}:\\
 
 \textit{Let $L$ be a linear, symmetric, positive differential operator defined of space $\Sigma$ and let}
 \begin{equation}\label{eq:pde}
@@ -81,4 +78,7 @@ I(u) = \int _{\Omega}\{\frac{1}{2}uLu-uf\}d\Omega
 \end{equation}  \textit{over the space $\Sigma$. On the other hand, if $u$ minimizes \eqref{eq:min} then $u$ satisfies \eqref{eq:pde}} \\
 
 Another requirement $u$ should obey is homogeneous boundary conditions, a requirement $T$ fails. Even so, this theorem can still be utilized by adapting it or by making the boundary conditions homogeneous. The latter is simpler to accomplish.
+
+\section{References}
+
 \end{document}
