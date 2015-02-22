@@ -46,21 +46,11 @@ with heat conductivity $k$ and temperature $T$. The thermal conductivity is diff
 
 The boundary of $A$, $\partial A$,  is divided in four segments such that $\partial A = \Gamma_1 \cup  \Gamma_2 \cup  \Gamma_3 \cup  \Gamma_4$. On these boundaries the following conditions hold:
 
-\begin{equation}\label{eq:bc1}
-T|_{\Gamma_1} = T_0
-\end{equation}
-
-\begin{equation}\label{eq:bc2}
-\nabla T|_{\Gamma_2} = 0
-\end{equation}
-
-\begin{equation}\label{eq:bc3}
-T|_{\Gamma_3} = T_0
-\end{equation}
-
-\begin{equation}\label{eq:bc4}
-k\frac{\partial T}{\partial n}|_{\Gamma_4}=-\alpha(T_w - T_{\infty})
-\end{equation}
+\begin{align}
+T\rvert_{\Gamma_1\cup\Gamma_3}& = T_0 \label{eq:bc13}\\
+\nabla T\rvert_{\Gamma_2} &= 0\label{eq:bc2}\\
+k\frac{\partial T}{\partial n}\rvert_{\Gamma_4}=&-\alpha(T_w - T_{\infty})\label{eq:bc4}
+\end{align}
 
 In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero. $\Gamma_4$ obeys Newton's heat transfer relation with the environment temperature $T_{\infty}$ and the temperature at the wall $T_w$.\\
 
@@ -113,13 +103,21 @@ $f=0$ and $L = -\nabla\cdot( k\nabla)$ according to \eqref{eq:heat}, so \eqref{e
 \end{equation}
 where the product rule and subsequent Gauss theorem is applied to expand the integral in two volume integrals and one boundary integral. The second integral is independent on $T$ and thus has no influence on the minimization and can be neglected. \\
 
-The boundary integral is evaluated over four boundaries by taking in account the boundary conditions \eqref{eq:bc1}-\eqref{eq:bc4}. 
+The boundary integral is evaluated over four boundaries by taking in account the boundary conditions \eqref{eq:bc13}$-$\eqref{eq:bc4}. 
 
-\begin{align}
+\begin{align}\label{eq:bcint13}
 	\frac{1}{2}\underset{\Gamma_1\cup\Gamma_3}{\int}(T_0-T_0)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma &= 0\\
-	\frac{1}{2}\underset{\Gamma_2}{\int}(T-w)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma & =\frac{1}{2}\underset{\Gamma_2}{\int}(T-w)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma
+	\frac{1}{2}\underset{\Gamma_2}{\int}(T-w)(k(0+0))\cdot\textbf{\^{n}} d\Gamma & = 0\label{eq:bcint2}\\ 
+	\frac{1}{2}\underset{\Gamma_4}{\int}(T-w)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma & = \frac{1}{2}\underset{\Gamma_4}{\int}Tk\frac{\partial T}{\partial n}d\Gamma - \frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamma\nonumber\\
+	&=-\frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma \label{eq:bcint4}
 \end{align}
+where $\frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamma$ is neglected as it too is independent of $T$.
 
+Finally, the minimization problem is given by
+\begin{equation}\label{eq:minf}
+\underset{T\in\Sigma} {min}I(v) =\frac{1}{2}\underset{\Omega}{\int}k\lvert\nabla T \rvert ^{2}  d\Omega + \frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma 
+\end{equation}
+with $\Sigma: \{T\rvert\quad T\rvert_{\Gamma_1\cup\Gamma_3}=T_0\rvert\quad \nabla T\rvert_{\Gamma_2}=0\}$.
 \section{References}
 
 \end{document}
