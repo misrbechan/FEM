@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\bibliography{FEM_ref}
 %\usepackage{biblatex}
 \title{Finite Element Method Computer Assignment 4.1.1}
 \begin{document}
@@ -74,11 +75,31 @@ Lu=f
 \end{equation}
 \textit{Then the solution $u$ minimizes the functional}
 \begin{equation}\label{eq:min}
-I(u) = \int _{\Omega}\{\frac{1}{2}uLu-uf\}d\Omega
+I(u) = \underset{\Omega}{\int}\{\frac{1}{2}uLu-uf\}d\Omega
 \end{equation}  \textit{over the space $\Sigma$. On the other hand, if $u$ minimizes \eqref{eq:min} then $u$ satisfies \eqref{eq:pde}} \\
 
 Another requirement $u$ should obey is homogeneous boundary conditions, a requirement $T$ fails. Even so, this theorem can still be utilized by adapting it or by making the boundary conditions homogeneous. The latter is simpler to accomplish.
 
+Let $Lu=f$ with non-homogeneous boundary equations and suppose that there is another smooth function $w$ that also satisfies the same non-homogeneous boundary conditions. Now let 
+\begin{equation}\label{eq:v}
+v=T-w
+\end{equation}
+$T$ and $w$ satisfy the same non-homogeneous boundary conditions, therefore $v$ satisfies homogeneous boundary conditions. Now the theorem can be applied to $v$ as it meets all the requirements. \\
+
+\begin{equation}\label{rhsv}
+Lv=LT-Lw=f-Lw
+\end{equation}
+so the corresponding minimization problem is given by 
+
+\begin{equation}\label{eq:min1}
+\underset{v\in\Sigma} {min}I(v) = \frac{1}{2}\underset{\Omega}{\int}vLvd\Omega-\underset{\Omega}{\int}v(f-Lw)d\Omega
+\end{equation}
+
+Substituting \eqref{eq:v} into \eqref{eq:min1} yields
+
+\begin{equation}
+\underset{v\in\Sigma} {min}I(v) = \frac{1}{2}\underset{\Omega}{\int}(T-w)L(T-w)d\Omega-\underset{\Omega}{\int}(T-w)(f-Lw)d\Omega
+\end{equation}
 \section{References}
 
 \end{document}
