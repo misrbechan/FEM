@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{article}
+\documentclass[10pt,a4paper,draft]{article}
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -19,7 +19,7 @@
 	\textbf{MMP Finite Element Methods (WI4243AP-FE)}
 	\begin{tabular}{lr}
 		\textbf{Shaikh Bechan} & \textbf{4146425}\\
-		\textbf{Zubin Ramlakhan} & \\
+		\textbf{Zubin Ramlakhan} & \textbf{4170229}\\
 	\end{tabular}
 \end{center}
 
@@ -68,7 +68,7 @@ Lu=f
 I(u) = \underset{\Omega}{\int}\{\frac{1}{2}uLu-uf\}d\Omega
 \end{equation}  \textit{over the space $\Sigma$. On the other hand, if $u$ minimizes \eqref{eq:min} then $u$ satisfies \eqref{eq:pde}} \\
 
-Another requirement $u$ should obey is homogeneous boundary conditions, a requirement $T$ fails. Even so, this theorem can still be utilized by adapting it or by making the boundary conditions homogeneous. The latter is simpler to accomplish.
+Another requirement $u$ should obey is homogeneous boundary conditions, a requirement $T$ fails. Even so, this theorem can still be utilized by making the boundary conditions homogeneous.
 
 Let $Lu=f$ with non-homogeneous boundary equations and suppose that there is another smooth function $w$ that also satisfies the same non-homogeneous boundary conditions. Now let 
 \begin{equation}\label{eq:v}
@@ -111,13 +111,112 @@ The boundary integral is evaluated over four boundaries by taking in account the
 	\frac{1}{2}\underset{\Gamma_4}{\int}(T-w)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma & = \frac{1}{2}\underset{\Gamma_4}{\int}Tk\frac{\partial T}{\partial n}d\Gamma - \frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamma\nonumber\\
 	&=-\frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma \label{eq:bcint4}
 \end{align}
-where $\frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamma$ is neglected as it too is independent of $T$.
+where $\frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamma$ in \eqref{eq:bcint4} is neglected as it too is independent of $T$.\\
 
-Finally, the minimization problem is given by
+Finally, the general minimization problem is given by
 \begin{equation}\label{eq:minf}
 \underset{T\in\Sigma} {min}I(v) =\frac{1}{2}\underset{\Omega}{\int}k\lvert\nabla T \rvert ^{2}  d\Omega + \frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma 
 \end{equation}
 with $\Sigma: \{T\rvert\quad T\rvert_{\Gamma_1\cup\Gamma_3}=T_0\rvert\quad \nabla T\rvert_{\Gamma_2}=0\}$. The boundary conditions \eqref{eq:bc13} and \eqref{eq:bc2} are essential boundary conditions.
+
+\section{Element stiffness matrix and element stiffness vector}
+This problem can be solved by computing the element stiffness matrix and the element stiffness vector.
+To do this, the solution is approximated with piecewise linear functions $\phi_j(x,y)$ such that
+
+\begin{equation}\label{eq:app}
+T(x,y) \simeq T^n (x,y) =\displaystyle\sum^n_{j=1} c_j \phi_j(x,y)
+\end{equation}
+
+One might derive the matrix and vector by substituting this approximation into the minimization problem $\underset{T\in\Sigma} {min}I(v) $ and then set the derivative of $c_j$ to zero. This is called the Ritz method.\\
+
+The second method is by deriving the Galerkin equations. To that end the partial differential equation is multiplied with a test function $\phi$ to derive these equations. Afterwards the approximation of the solution is substituted into the weak form which then results in the element stiffness matrix and element stiffness vector. \\
+
+Both methods yield the same results. The following shows how the matrix and vector are acquired using Galerkin's method. First, the Galerkin equations:
+
+\begin{align}\label{eq:Gal1}
+-\underset{\Omega}{\int}\phi \nabla \cdot(k\nabla T)d\Omega&=0\nonumber\\
+-\underset{\Omega}{\int} \nabla \cdot \left(\phi k \nabla T\right)- \nabla \phi k \nabla Td\Omega &=0\nonumber\\
+-\underset{\Gamma}{\int}\phi k \frac{\partial T}{\partial n} d\Gamma + \underset{\Omega}{\int}\nabla \phi k \nabla Td\Omega &=0\nonumber\\
+\underset{\Gamma_4}{\int}\phi \alpha \left(T_w -T_{\infty}\right)d\Gamma + \underset{\Omega}{\int}\nabla \phi k \nabla T d\Omega&=0
+\end{align}
+
+where the boundary integral in the penultimate line is split up over the four boundaries like in \eqref{eq:bcint13} - \eqref{eq:bcint4} yielding \eqref{eq:Gal1} as a result. \\
+
+The weak form is thus formulated as follows:
+\begin{equation*}
+\underset{\Gamma_4}{\int}\phi \alpha \left(T_w -T_{\infty}\right)d\Gamma + \underset{\Omega}{\int}\nabla \phi k \nabla T d\Omega=0
+\end{equation*}
+$\textit{Find } T\in \Sigma\{\textit{T sufficiently smooth } \rvert T_{\Gamma_1 \cup \Gamma_3 }=T_0\}, \forall \phi \in \Sigma$\\
+
+Now the approximation \eqref{eq:app} is applied. $\phi$ is approximated in the same way i.e.
+
+\begin{equation*}
+\phi \simeq \displaystyle\sum^n_{i=1} b_i \phi_i = \phi_i, i=1...n 
+\end{equation*}
+As $\phi$ is chosen arbitrarily, it is useful to make one of the of the coefficients $b_i$ equal to one and the others to zero.\\
+
+Substituting these approximations into the weak form results in 
+\begin{align}\label{eq:weakapp}
+\underset{\Gamma_4}{\int} \alpha \phi_i  \left(\displaystyle\sum^n_{j=1} c_j \phi_j - T_{\infty}\right)d\Gamma + \underset{\Omega}{\int}\nabla \phi_i k \nabla \displaystyle\sum^n_{j=1} c_j \phi_j d\Omega &=0\nonumber\\
+\displaystyle\sum^n_{j=1} c_j \cdot \alpha\underset{\Gamma_4}{\int}  \phi_i  \phi_jd\Gamma + \displaystyle\sum^n_{j=1} c_j \cdot \underset{\Omega}{\int}\nabla \phi_i k \nabla  \phi_j d\Omega &= \displaystyle\sum^n_{j=1} c_j\cdot \alpha\underset{\Gamma_4}{\int} \phi_i T_{\infty}d\Gamma \\
+&(i=1...n)\nonumber
+\end{align}
+
+\eqref{eq:weakapp} can be written more compactly as 
+\begin{equation*}
+\displaystyle\sum^n_{j=1} c_j S_{ij} = f_i
+\end{equation*}
+
+with the element stiffness vector 
+
+\begin{equation*}
+f_i =\alpha\underset{\Gamma_4}{\int} \phi_i T_{\infty}d\Gamma 
+\end{equation*}
+
+and the element stiffness matrix that consists of a boundary matrix 
+
+\begin{equation*}
+S^{B}_{ij} = \alpha\underset{\Gamma_4}{\int}  \phi_i  \phi_jd\Gamma 
+\end{equation*}
+
+ and a volume matrix
+ 
+\begin{equation*}
+ S^V_{ij} = \underset{\Omega}{\int}k\nabla \phi_i  \nabla  \phi_j d\Omega
+\end{equation*}
+ 
+The matrices and vector need to be evaluated and are done so using the theorems of  Newton-Cotes and Holland \& Bell.
+
+The set of functions $\phi_i $ are piecewise linear functions and therefore can be written as 
+
+\begin{equation*}
+\phi_i = \alpha_i + \beta_i x +  \gamma_i y
+\end{equation*}
+
+ According to Holland \& Bell, the $ S^B_{ij} $ is evaluated as follows
+ 
+ \begin{equation}\label{eq:SB}
+ S^{B}_{ij} = \alpha\underset{\Gamma_4}{\int}  \phi_i  \phi_jd\Gamma  = \alpha \lVert \textbf{x}_{l1}-\textbf{x}_{l2}\rVert\cdot \begin{cases}
+ \frac{2!0!}{(1+2+0)!} = \frac{1}{3} & i =j\\
+ \frac{1!1!}{(1+1+1)!} = \frac{1}{6} & i \neq j
+ \end{cases}
+ \end{equation}
+
+where $\lVert \textbf{x}_{l1}-\textbf{x}_{l2}\rVert$ is the distance between two points.
+
+Holland \& Bell are applied to $S^V_{ij}$ as well
+
+\begin{equation}
+ S^V_{ij} = \underset{\Omega}{\int}k\nabla \phi_i  \nabla  \phi_j d\Omega =k \left(\beta_i \beta_j+\gamma_i \gamma_j\right)\frac{\lVert\Delta\rVert}{2}
+\end{equation}
+where $k$ can be $k_A$ or $k_B$ depending on the position on the plate.
+
+\section{Computation}
+Before computing the element stiffness matrix and vector, a mesh has to be created. This mesh consists of a grid of triangular elements along the surface of the plates and line elements on the boundaries.
+
+%insert picture mesh
+
+
 \section{References}
 
 \end{document}
