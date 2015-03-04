@@ -1,9 +1,14 @@
-\documentclass[10pt,a4paper,draft]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epstopdf}
+\usepackage{subfig}
+\usepackage{tabularx}
 \bibliography{FEM_ref}
 %\usepackage{biblatex}
 \title{Finite Element Method Computer Assignment 4.1.1}
@@ -185,15 +190,64 @@ S^{B}_{ij} = \alpha\underset{\Gamma_4}{\int}  \phi_i  \phi_jd\Gamma
  S^V_{ij} = \underset{\Omega}{\int}k\nabla \phi_i  \nabla  \phi_j d\Omega
 \end{equation*}
  
-The matrices and vector need to be evaluated and are done so using the theorems of  Newton-Cotes and Holland \& Bell.
+The matrices and vector need to be evaluated and are done so using the theorem of  Holland \& Bell .\\
+
+\textbf{Theorem 2 Holland \& Bell} \textit{Let S be a simplex in $\mathbb{R}$ and let $\Delta$ be the determinant defined by }
+
+\begin{equation*}\label{eq:det1}
+\Delta = \begin{vmatrix}
+1		& x^1_{0} 		& x^1_{2} 		& \dots 	& x^1_{n}\\
+1		& x^2_{0} 		& x^2_{2} 		& \dots 	& x^2_{n}\\
+\vdots	& \vdots		& \vdots 		& \vdots	& \vdots \\
+1		& x^{n+1}_{0} 	& x^{n+1}_{2} 	& \dots 	& x^{n+1}_{n}
+\end{vmatrix}
+\end{equation*}
+\textit{with} \textbf{x}$^1$, \textbf{x}$^2$, $\cdots$ \textbf{x}$^{n+1}$ \textit{the vertices of S.}\\
+
+\textit{Let} $\lambda_i$(\textbf{x}) \textit{be the linear basis functions over S defined by}
+
+\begin{equation*}
+\begin{split}
+\lambda_i(\textbf{x}) \quad& \textit{ linear}\\
+\lambda_i(\textbf{x}^j)=\delta_{ij} \quad& i,j=1,2\cdots n+1
+\end{split}
+\end{equation*}
+\\
+\textit{Then the following general integration rule holds:}
+
+\begin{equation*}
+\underset{S}{\int}\lambda^{m_1}_1\lambda^{m_2}_2\cdots \lambda^{m_{n+1}}_{n+1}d\Omega = \frac{m_1! m_2! \cdots m_{n+1}!}{\left(\underset{i}{\Sigma} \, m_i +n \right)! }\lvert \Delta \rvert,
+\end{equation*}
+\textit{for all} $m_i\geq 0$.\\
+
+$\underset{i}{\Sigma} \, m_i$ represents the dimensionality of the elemeng i.e. 2 for triangular elements and 1 for line elements.\\
 
 The set of functions $\phi_i $ are piecewise linear functions and therefore can be written as 
-
 \begin{equation*}
 \phi_i = \alpha_i + \beta_i x +  \gamma_i y
 \end{equation*}
 
- According to Holland \& Bell, the $ S^B_{ij} $ is evaluated as follows
+The determinant of these basis functions are equal to 
+\begin{equation*}\label{eq:det2}
+\Delta = \begin{vmatrix}
+1		& x^1 		& y^1\\
+1		& x^2 		& y^2\\
+1		& x^3 		& y^3
+\end{vmatrix}
+\end{equation*}
+
+which is equal to twice the area of a triangular element.\\
+
+
+According to Holland \& Bell, $f_i$ is evaluated as follows:
+\begin{align}\label{f}
+f_i &=\alpha T_{\infty}\underset{\Gamma_4}{\int}  \phi_i d\Gamma \nonumber\\ 
+    &= \alpha T_{\infty}\rVert\textbf{x}_{l1}-\textbf{x}_{l2}\rVert\frac{1!}{(1+1)!}\nonumber\\ 
+    &=  \frac{1}{2} \alpha T_{\infty}\rVert\textbf{x}_{l1}-\textbf{x}_{l2}\rVert
+\end{align}
+In this case, the integral is a boundary integral. Therefore, the elements along that boundary are one dimensional line elements with dimensionality 1. Hence instead of a determinant, the length $\rVert\textbf{x}_{l1}-\textbf{x}_{l2}\rVert$ of one element is needed.\\
+ 
+$ S^B_{ij} $ is evaluated in almost the same way. The difference is that a distinction between the cases $i=j$ and $i\neq j$ is need as seen in \eqref{eq:SB}
  
  \begin{equation}\label{eq:SB}
  S^{B}_{ij} = \alpha\underset{\Gamma_4}{\int}  \phi_i  \phi_jd\Gamma  = \alpha \lVert \textbf{x}_{l1}-\textbf{x}_{l2}\rVert\cdot \begin{cases}
@@ -201,22 +255,136 @@ The set of functions $\phi_i $ are piecewise linear functions and therefore can 
  \frac{1!1!}{(1+1+1)!} = \frac{1}{6} & i \neq j
  \end{cases}
  \end{equation}
+\\
 
-where $\lVert \textbf{x}_{l1}-\textbf{x}_{l2}\rVert$ is the distance between two points.
+Before 	\textbf{theorem 2} is applied to $S^V_{ij}$ the gradients of the basis functions are rewritten as 
 
-Holland \& Bell are applied to $S^V_{ij}$ as well
-
+\begin{equation*}
+\nabla \phi_i  \nabla  \phi_j = \left(\beta_i \beta_j+\gamma_i \gamma_j\right) 
+\end{equation*}
+\\
+This value is a constant and can be put in front of the  integral. $S^V_{ij}$ is equal to
 \begin{equation}
- S^V_{ij} = \underset{\Omega}{\int}k\nabla \phi_i  \nabla  \phi_j d\Omega =k \left(\beta_i \beta_j+\gamma_i \gamma_j\right)\frac{\lVert\Delta\rVert}{2}
+ S^V_{ij} = k  \left(\beta_i \beta_j+\gamma_i \gamma_j\right)\underset{\Omega}{\int} d\Omega =k  \left(\beta_i \beta_j+\gamma_i \gamma_j\right)\frac{\lVert\Delta\rVert}{2}
 \end{equation}
-where $k$ can be $k_A$ or $k_B$ depending on the position on the plate.
+
+The integral is essential the surface of the triangular element which is equal to half the determinant. \\
+The plate can have two values for $k$ depending on the elements being on area A or area B. Therefore $S^V_{ij}$ must change accordingly i.e. $k$ must assume the value corresponding to the material where the elements are situated.
 
 \section{Computation}
-Before computing the element stiffness matrix and vector, a mesh has to be created. This mesh consists of a grid of triangular elements along the surface of the plates and line elements on the boundaries.
+\subsection{Mesh}
+Before computing the element stiffness matrix and vector, a mesh has to be created. This mesh consists of a grid of triangular elements along the surface of the plates and line elements on the boundaries.\\
 
+The data specific to the problem is given in table \ref{table:dim}.
+
+\begin{table}\label{tabel:dim}
+\begin{center}
+
+\begin{tabular}{cccccc}
+$T_0$ & = & 1 & $h_0$ & = & 0.4\\
+$k_A $ & =& 0.1 & $h$ & =&1\\
+$k_B$ & = & 1\\
+$\alpha$ & = & 0.01 & $b_0$ & = &0.4\\
+$T_{\infty}$ &= & 0 & $b$ &=& 1
+\end{tabular} 
+\end{center}
+\caption{Dimensions of the plate and other parameters.}
+\label{table:dim}
+\end{table}
+
+
+The problem is symmetrical along the $y$-axis, therefore the computational effort can be reduced by generating a mesh that covers half the domain. Such a mesh can be seen in the figure %\ref{mesh}
 %insert picture mesh
+\subsection{Results}
+Due to the boundary conditions, the solution is expected to portray some sort of cooling at the top of the plate. The sides remain the same temperature, while the insulation at the bottom requires the isotherms to cross the plate perpendicular. \\
 
 
+Figure \ref{fig:001} displays the problem's solution with increasing numbers of elements and at $\alpha = 0.01$ in the form of contour plots and color plots. The solution indeed behaves as predicted. The color bars next to the color plots confirm that the temperature of the plate never exceeds the temperature of the side and is positive everywhere, ruling out nonphysical behaviour.   Also noticeable is the effect of the increase of elements. A rough mesh can lead to some crooked behavior in the isotherms. A finer mesh has a smoothing effect on this crookedness. Looking at the results, a mesh of 50 elements horizontal and vertical seems to suffice at yielding a trustworthy numerical solution to the heat equation.\\
+
+The same problem is redone for a different value of $\alpha$ i.e. $\alpha = 10$, the result of which can be seen in figure \ref{fig:10}. The overall profile of the isotherms remains the same, but the crucial difference is the fact that, due to the larger value of $\alpha$, the cooling effect is much larger. That can be noticed from the fact that the cooling effect has penetrated the plate much further when figure \ref{fig:10} is compared to figure \ref{fig:001}.\\
+Again, the increase in number of elements has a smoothing effect, but like with the lower value for $\alpha$, around 50 elements in both directions suffices.
+
+\begin{figure}[h]
+\centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a10_20el}
+                \caption{20 elements contour plot}
+                \label{fig:cont_a10_20el}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a10_20el}
+                \caption{20 elements color plot}
+                \label{fig:colplot_a10_20el}
+        \end{subfigure}
+        ~           
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a10_50el}
+                \caption{50 elements contour plot}
+                \label{fig:col_a10_50el}
+        \end{subfigure}      
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a10_50el}
+                \caption{20 elements color plot}
+                \label{fig:colplot_a10_50el}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a10_99el}
+                \caption{99 elements contour plot}
+                \label{fig:cont_a10_99el}
+        \end{subfigure}
+        ~ 
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a10_99el}
+                \caption{99 elements color plot}
+                \label{fig:colplot_a10_99el}
+        \end{subfigure}
+        \caption{solution of the heat equation for a number of elements with $\alpha = 0.01$} 
+        \label{fig:001}                                
+\end{figure}
+
+\begin{figure}[h]
+\centering
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a001_20el}
+                \caption{20 elements contour plot}
+                \label{fig:cont_a001_20el}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a001_20el}
+                \caption{20 elements color plot}
+                \label{fig:colplot_a001_20el}
+        \end{subfigure}
+        ~           
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a001_50el}
+                \caption{50 elements contour plot}
+                \label{fig:col_a001_50el}
+        \end{subfigure}      
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a001_50el}
+                \caption{20 elements color plot}
+                \label{fig:colplot_a001_50el}
+        \end{subfigure}
+        ~
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{cont_a001_99el}
+                \caption{99 elements contour plot}
+                \label{fig:cont_a001_99el}
+        \end{subfigure}
+        ~ 
+        \begin{subfigure}[b]{0.45\textwidth}
+                \includegraphics[width=\textwidth]{colplot_a001_99el}
+                \caption{99 elements color plot}
+                \label{fig:colplot_a001_99el}
+        \end{subfigure}
+        \caption{solution of the heat equation for a number of elements with $\alpha = 0.01$} 
+        \label{fig:10}                                
+\end{figure}
 \section{References}
 
 \end{document}
