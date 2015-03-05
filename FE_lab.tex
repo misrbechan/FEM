@@ -9,7 +9,8 @@
 \usepackage{epstopdf}
 \usepackage{subfig}
 \usepackage{tabularx}
-\bibliography{FEM_ref}
+\usepackage{listings}
+%\bibliography{FEM_ref}
 %\usepackage{biblatex}
 \title{Finite Element Method Computer Assignment 4.1.1}
 \begin{document}
@@ -296,8 +297,14 @@ $T_{\infty}$ &= & 0 & $b$ &=& 1
 \end{table}
 
 
-The problem is symmetrical along the $y$-axis, therefore the computational effort can be reduced by generating a mesh that covers half the domain. Such a mesh can be seen in the figure %\ref{mesh}
-%insert picture mesh
+The problem is symmetrical along the $y$-axis, therefore the computational effort can be reduced by generating a mesh that covers half the domain. Such a mesh can be seen in the figure \ref{fig:mesh}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\linewidth]{mesh}
+\caption{Only half of the domain of the plate is computed due to symmetry. Here the right hand side of the plate along with a number of elements can be seen.}
+\label{fig:mesh}
+\end{figure}
+
 \subsection{Results}
 Due to the boundary conditions, the solution is expected to portray some sort of cooling at the top of the plate. The sides remain the same temperature, while the insulation at the bottom requires the isotherms to cross the plate perpendicular. \\
 
@@ -390,5 +397,8 @@ Again, the increase in number of elements has a smoothing effect, but like with 
         \label{fig:10}                                
 \end{figure}
 \section{Appendix}
-%codecodecode
+The following is the exact code used to create the mesh in mesh.msh, define the problem in mesh.prb and define the element stiffness matrices and vector in elemsubr.f90.
+\lstinputlisting[breaklines = true,frame=single]{mesh.msh}
+\lstinputlisting[breaklines = true,frame=single]{mesh.prb}
+\lstinputlisting[breaklines = true,frame=single]{elemsubr.f90}
 \end{document}
