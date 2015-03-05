@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -314,7 +315,7 @@ Also noticeable is the effect of the increase of elements. A rough mesh can lead
 
 The same problem is redone for a different value of $\alpha$ i.e. $\alpha = 10$, the result of which can be seen in figure \ref{fig:10}. The overall profile of the isotherms remains the same, but the crucial difference is the fact that, due to the larger value of $\alpha$, the cooling effect is much larger. That can be noticed from the fact that the cooling effect has penetrated the plate much further when figure \ref{fig:10} is compared to figure \ref{fig:001}.\\
 Again, the increase in number of elements has a smoothing effect, but like with the lower value for $\alpha$, around 50 elements in both directions suffices.
-
+\newpage
 \begin{figure}[h]
 \centering
         \begin{subfigure}[b]{0.45\textwidth}
@@ -352,10 +353,10 @@ Again, the increase in number of elements has a smoothing effect, but like with 
                 \caption{99 elements color plot}
                 \label{fig:colplot_a10_99el}
         \end{subfigure}
-        \caption{solution of the heat equation for a number of elements with $\alpha = 0.01$} 
+        \caption{Solution of the heat equation for a number of elements with $\alpha = 0.01$} 
         \label{fig:001}                                
 \end{figure}
-
+\newpage
 \begin{figure}[h]
 \centering
         \begin{subfigure}[b]{0.45\textwidth}
@@ -396,6 +397,8 @@ Again, the increase in number of elements has a smoothing effect, but like with 
         \caption{solution of the heat equation for a number of elements with $\alpha = 0.01$} 
         \label{fig:10}                                
 \end{figure}
+\newpage
+\appendix
 \section{Appendix}
 The following is the exact code used to create the mesh in mesh.msh, define the problem in mesh.prb and define the element stiffness matrices and vector in elemsubr.f90.
 \lstinputlisting[breaklines = true,frame=single]{mesh.msh}
