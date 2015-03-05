@@ -1,0 +1,42 @@
+# mesh.msh
+#
+constants
+reals
+height = 1  # height of the square
+width = 0.5 # half width of the square
+
+
+
+integers
+nelm_hor = 50		# number elements horizontal
+nelm_vert = 50		# number elements vertical
+shape_cur = 1		#
+shape_sur = 3		#
+end
+#
+
+#	Actual definition of the mesh
+#
+mesh2d
+# Definition of the coordinates 
+points
+p1=(0,0)
+p2=(width,0)
+p3=(width,height)
+p4=(0,height)
+
+#	Definition of the curves
+curves
+# Boundary of square
+c1 = line shape_cur ( p1,p2,nelm= nelm_hor )
+c2 = line shape_cur ( p2,p3,nelm= nelm_vert )
+c3 = line shape_cur ( p3,p4,nelm= nelm_hor )
+c4 = line shape_cur ( p4,p1,nelm= nelm_vert )
+
+#	Definition of the surface
+
+surfaces
+s1 = triangle shape_sur (c1, c2, c3, c4 ) !B
+
+plot
+end

@@ -1,0 +1,32 @@
+#  File: mesh.prb
+
+#
+#
+#
+#
+problem
+    types                                
+        elgrp1 = (type=1)                           
+        
+        natboundcond
+        bngrp1 = (type = 2)
+        
+        bounelements
+        belm1 = curves(c3)
+                                 
+        essboundcond                         
+        curves(c2)                                 
+                                         
+end
+#
+# Define the structure of the main program, see Section 4.7.9
+#
+structure
+    matrix_structure: symmetric          # a symmetric profile matrix is used
+    prescribe_boundary_conditions mesh = 1, curves(c2)
+    solve_linear_system, mesh
+    plot_contour text = 'Temperature a = 0.01'
+    plot_coloured_levels mesh, text = 'Temperature a = 0.01' 
+    
+end
+end_of_sepran_input
