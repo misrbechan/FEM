@@ -30,7 +30,9 @@
 
 \section{Introduction}
 The following is a report containing the evaluation of the heat equation with the finite element method.
-To solve the two-dimensional heat equation numerically, the finite element method is applied. To that end the minimization problem corresponding to the partial differential in question is derived. The solution of the minimization problem is approximated with the finite element method by deriving the element stiffness matrix and element stiffness vector using triangular and line elements.
+To solve the two-dimensional heat equation numerically, the finite element method is applied. To that end the minimization problem corresponding to the partial differential in question is derived. The solution of the minimization problem is approximated with the finite element method by deriving the element stiffness matrix and element stiffness vector using triangular and line elements.\\
+The code used in the numerical solution can be found in the Appendix.
+Please note the theorems and notation are referenced to Numerical Methods in Scientific Computing by J. van Kan, A. Segal, F. Vermolen.
 
 \section{The Heat Equation}
 	\begin{figure}[h]
@@ -39,9 +41,9 @@ To solve the two-dimensional heat equation numerically, the finite element metho
 		\caption{Rectangular plate made of two materials, $A$ and $B$.}
 		\label{fig:schem}
 	\end{figure}
-Consider the rectangular plate shown in figure \ref{fig:schem}, with width, $b$, and height, $h$. In the center of the plate is a rectangular part, of a different material, with width, $b_0$ and height, $h_0$. $A$ denotes the outer part of the plate while $B$ denotes the inner part.
+Consider the rectangular plate shown in figure \ref{fig:schem}, with width $b$ and height $h$. In the center of the plate is a rectangular part, of a different material, with width, $b_0$ and height, $h_0$. $A$ denotes the outer part of the plate while $B$ denotes the inner part.
 
-The situation is stationary and the effects of convection and sources are absent. Thus the heat equation is simply defined by the conduction (diffusion) term as shown in \eqref{eq:heat}
+The situation is stationary and the effects of convection and sources/sinks are absent. Thus the heat equation is simply defined by the conduction (diffusion) term as shown in \eqref{eq:heat}
 
 \begin{equation}\label{eq:heat}
 	-\nabla \cdot (k \nabla T) = 0
@@ -57,14 +59,14 @@ T\rvert_{\Gamma_1\cup\Gamma_3}& = T_0 \label{eq:bc13}\\
 k\frac{\partial T}{\partial n}\rvert_{\Gamma_4}=&-\alpha(T_w - T_{\infty})\label{eq:bc4}
 \end{align}
 
-In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero. $\Gamma_4$ obeys Newton's heat transfer relation with the environment temperature $T_{\infty}$ and the temperature at the wall $T_w$.\\
+In words, the temperature at boundaries $\Gamma_1$ and $\Gamma_3$ are held constant at $T=T_0$. The flux at $\Gamma_2$ is zero. $\Gamma_4$ obeys Newton's heat transfer relation with the thermal diffusivity $\alpha$, the environment temperature $T_{\infty}$ and the temperature at the wall $T_w$.\\
 
 In this problem a symmetry plane is present. This plane runs along the midsection of the plate in the vertical direction. Here, to ensure symmetry, the gradient of the temperature must be zero.
 
 \section{Minimization problem}
-A partial differential equation can be related to an equivalent minimization problem with the following theorem\cite{Kan2008}:\\
+A partial differential equation can be related to an equivalent minimization problem with the following theorem:\\
 
-\textit{Let $L$ be a linear, symmetric, positive differential operator defined of space $\Sigma$ and let}
+\textbf{Theorem 1 }\textit{Let $L$ be a linear, symmetric, positive differential operator defined of space $\Sigma$ and let}
 \begin{equation}\label{eq:pde}
 Lu=f
 \end{equation}
@@ -106,7 +108,7 @@ $f=0$ and $L = -\nabla\cdot( k\nabla)$ according to \eqref{eq:heat}, so \eqref{e
 	&=\frac{1}{2}\underset{\Omega}{\int}\nabla T\cdot k \nabla T d\Omega - \frac{1}{2}\underset{\Omega}{\int}\nabla w\cdot k \nabla w d\Omega\\  &-\frac{1}{2}\underset{\Gamma}{\int}(T-w)(k\nabla(T+w))\cdot\textbf{\^{n}} d\Gamma
 	\end{split}
 \end{equation}
-where the product rule and subsequent Gauss theorem is applied to expand the integral in two volume integrals and one boundary integral. The second integral is independent on $T$ and thus has no influence on the minimization and can be neglected. \\
+where the product rule and subsequent Gauss theorem is applied to expand the integral in two volume integrals and one boundary integral. The second integral is independent of $T$ and thus has no influence on the minimization and can be neglected. \\
 
 The boundary integral is evaluated over four boundaries by taking in account the boundary conditions \eqref{eq:bc13}$-$\eqref{eq:bc4}. 
 
@@ -120,9 +122,9 @@ where $\frac{1}{2}\underset{\Gamma_4}{\int}wk\frac{\partial w}{\partial n}d\Gamm
 
 Finally, the general minimization problem is given by
 \begin{equation}\label{eq:minf}
-\underset{T\in\Sigma} {min}I(v) =\frac{1}{2}\underset{\Omega}{\int}k\lvert\nabla T \rvert ^{2}  d\Omega + \frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma 
+\underset{T\in\Sigma} {min }I(v) =\frac{1}{2}\underset{\Omega}{\int}k\lvert\nabla T \rvert ^{2}  d\Omega + \frac{1}{2}\underset{\Gamma_4}{\int}\alpha T(T_w-T_{\infty})d\Gamma 
 \end{equation}
-with $\Sigma: \{T\rvert\quad T\rvert_{\Gamma_1\cup\Gamma_3}=T_0\rvert\quad \nabla T\rvert_{\Gamma_2}=0\}$. The boundary conditions \eqref{eq:bc13} and \eqref{eq:bc2} are essential boundary conditions.
+with $\Sigma: \{T\rvert\quad T\rvert_{\Gamma_1\cup\Gamma_3}=T_0\}$. The boundary conditions \eqref{eq:bc13} and \eqref{eq:bc2} are essential boundary conditions.
 
 \section{Element stiffness matrix and element stiffness vector}
 This problem can be solved by computing the element stiffness matrix and the element stiffness vector.
@@ -385,6 +387,6 @@ Again, the increase in number of elements has a smoothing effect, but like with 
         \caption{solution of the heat equation for a number of elements with $\alpha = 0.01$} 
         \label{fig:10}                                
 \end{figure}
-\section{References}
-
+\section{Appendix}
+%codecodecode
 \end{document}
